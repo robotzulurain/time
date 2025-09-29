@@ -3,3 +3,6 @@ gunicorn
 psycopg2-binary
 whitenoise
 dj-database-url
+djangorestframework>=3.14.0
+django-cors-headers>=4.0.0
+python-dotenv>=1.0.0
