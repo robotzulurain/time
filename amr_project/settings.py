@@ -124,3 +124,26 @@ except NameError:
 # Proxy SSL header for Render / similar platforms
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # --------------------------------------------------------------------------
+
+# --- Netlify frontend origin (added for deployment) ---
+NETLIFY_ORIGIN = "https://timeamr.netlify.app"   # replace if you choose a different Netlify site name
+
+# Ensure Netlify origin is allowed for CORS and CSRF
+try:
+    if 'CORS_ALLOWED_ORIGINS' in globals():
+        if NETLIFY_ORIGIN not in CORS_ALLOWED_ORIGINS:
+            CORS_ALLOWED_ORIGINS.append(NETLIFY_ORIGIN)
+    else:
+        CORS_ALLOWED_ORIGINS = ["http://localhost:3000", NETLIFY_ORIGIN]
+except Exception:
+    CORS_ALLOWED_ORIGINS = ["http://localhost:3000", NETLIFY_ORIGIN]
+
+try:
+    if 'CSRF_TRUSTED_ORIGINS' in globals():
+        if NETLIFY_ORIGIN not in CSRF_TRUSTED_ORIGINS:
+            CSRF_TRUSTED_ORIGINS.append(NETLIFY_ORIGIN)
+    else:
+        CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", NETLIFY_ORIGIN]
+except Exception:
+    CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", NETLIFY_ORIGIN]
+# -----------------------------------------------------
