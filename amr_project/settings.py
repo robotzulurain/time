@@ -96,3 +96,31 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+
+# ---------- production static & WhiteNoise (added by deploy helper) ----------
+import os
+from pathlib import Path
+
+# Ensure BASE_DIR exists (Django default usually defines it earlier)
+try:
+    BASE_DIR
+except NameError:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Static files (collected to this directory)
+STATIC_ROOT = Path(BASE_DIR) / "staticfiles"
+STATIC_URL = "/static/"
+
+# Use WhiteNoise storage (compressed + manifest)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Ensure whitenoise middleware is present
+try:
+    if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
+        MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + list(MIDDLEWARE)
+except NameError:
+    MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware']
+
+# Proxy SSL header for Render / similar platforms
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# --------------------------------------------------------------------------
